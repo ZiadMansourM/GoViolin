@@ -1,21 +1,41 @@
-pipeline {
-    def customImage
-    stages {
-        stage('Clone repository') {
-            checkout scm
+pipeline
+{
+    environment
+    {
+        IMAGE_NAME = 'ziadmmh/goviolin'
+        CREDENTIALS = 'dockerHub'
+        CUSTOM_IMAGE = ''
+    }
+    agent any
+    stages
+    {
+        stage('Build IMAGE')
+        {
+            CUSTOM_IMAGE = docker.build("ziadmmh/goviolin")
         }
-        stage('Build image') {
-            customImage = docker.build("ziadmmh/goviolin")
-        }
-        stage('Push image') {   
-            docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
-                customImage.push()
+        
+        stage('Push')
+        {
+            steps
+            {
+                script
+                {
+                    docker.withRegistry('https://registry.hub.docker.com', CREDENTIALS) 
+                    {
+                        CUSTOM_IMAGE.push('latest')
+                    }
+                }
             }
         }
     }
-    post {
-        always {
-            emailext body: 'A Summary EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Summary'
+    post
+    {
+        always
+        {
+            echo 'Finished.'
+        }
+        failure {
+            mail to: 'ziadmansour.4.9.2000@gmail.com', subject: 'The Pipeline failed :(', body: 'Please refer to the logs ...'
         }
     }
 }
