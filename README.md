@@ -52,9 +52,9 @@ CMD ["./server.o"]
 ```
 
 FeedBack:
-> Size were 453 MB ! 
+> Size were 453 MB 🚩
 
-## Optmize Image
+## Optmize Image ⚡
 
 I found this amazing [video](https://www.youtube.com/watch?v=KLOdisHW8rQ) Discussing the problem I noticed in the previous step.
 
@@ -77,5 +77,10 @@ CMD ["./server.o"]
 ```
 
 FeedBack:
-> Went from 453 MB to 110 MB
+> Went from 453 MB to 110 MB ✔
 
+## Build and Test Jenkins PipLine
+Steps:
+- [X] Build Image
+- [X] Push to docker Hub 
+- [X] Report
