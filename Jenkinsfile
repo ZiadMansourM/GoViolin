@@ -1,14 +1,21 @@
 node {
-
-    checkout scm
-
-
-    docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
-
-        /* [1]: Build Image */
-        def customImage = docker.build("ziadmmh/goviolin")
-
-        /* [2]: Push the container to the custom Registry */
-        customImage.push()
+    def customImage
+    stages {
+        stage('Clone repository') {
+            checkout scm
+        }
+        stage('Build image') {
+            customImage = docker.build("ziadmmh/goviolin")
+        }
+        stage('Push image') {   
+            docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
+                customImage.push()
+            }
+        }
+    }
+    post {
+        always {
+            emailext body: 'A Summary EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Summary'
+        }
     }
 }
