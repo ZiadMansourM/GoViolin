@@ -1,4 +1,4 @@
-node {
+pipeline {
     def customImage
     stages {
         stage('Clone repository') {
