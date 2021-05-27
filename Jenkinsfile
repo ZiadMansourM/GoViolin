@@ -1,4 +1,4 @@
-Pipline {
+node {
 
     checkout scm
 
