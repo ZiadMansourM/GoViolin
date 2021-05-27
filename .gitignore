@@ -1,0 +1,6 @@
+# Compiled Source #
+###################
+
+*.exe
+GoViolin
+server.o
