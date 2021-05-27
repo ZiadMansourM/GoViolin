@@ -15,11 +15,10 @@ pipeline
             {
                 script
                 {
-                    CUSTOM_IMAGE = docker.build("ziadmmh/goviolin")
+                    CUSTOM_IMAGE = docker.build IMAGE_NAME + ":$BUILD_NUMBER" 
                 }
             }
         }
-        
         stage('Push')
         {
             steps
@@ -28,11 +27,16 @@ pipeline
                 {
                     docker.withRegistry('https://registry.hub.docker.com', CREDENTIALS) 
                     {
-                        CUSTOM_IMAGE.push('latest')
+                        CUSTOM_IMAGE.push()
                     }
                 }
             }
         }
+        stage('Cleaning up') { 
+            steps { 
+                sh "docker rmi $IMAGE_NAME:$BUILD_NUMBER"
+            }
+        } 
     }
     post
     {
