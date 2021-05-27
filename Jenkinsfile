@@ -2,7 +2,7 @@ pipeline
 {
     environment
     {
-        IMAGE_NAME = 'ziadmmh/goviolin'
+        IMAGE_NAME = 'ziadmmh/goviolintask'
         CREDENTIALS = 'dockerHub'
         CUSTOM_IMAGE = ''
     }
@@ -27,7 +27,7 @@ pipeline
                 {
                     docker.withRegistry('https://registry.hub.docker.com', CREDENTIALS) 
                     {
-                        CUSTOM_IMAGE.push()
+                        CUSTOM_IMAGE.push("latest")
                     }
                 }
             }
