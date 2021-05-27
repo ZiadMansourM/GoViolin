@@ -11,7 +11,13 @@ pipeline
     {
         stage('Build IMAGE')
         {
-            CUSTOM_IMAGE = docker.build("ziadmmh/goviolin")
+            steps
+            {
+                script
+                {
+                    CUSTOM_IMAGE = docker.build("ziadmmh/goviolin")
+                }
+            }
         }
         
         stage('Push')
