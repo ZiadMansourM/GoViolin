@@ -28,9 +28,7 @@ jobs:
       
       - name: Extract metadata from Dockerfile
         id: metadata
-        uses: docker/metadata-action@v5
-        with:
-          images: ziadmmh/goviolin
+        run: echo "::set-output name=tags::$(awk '/^LABEL org.opencontainers.image.tags/{gsub(/"/,"",$2); gsub(".*=",""); print }' Dockerfile)"
 
       - name: Build and Push Multi-Arch Docker Image
         uses: docker/build-push-action@v5
