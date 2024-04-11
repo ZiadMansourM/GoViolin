@@ -56,7 +56,6 @@ func main() {
 	http.HandleFunc("/duets", Duets)
 	http.HandleFunc("/duetshow", DuetShow)
 	http.ListenAndServe(getPort(), nil)
-
 }
 
 // Detect $PORT and if present uses it for listen and serve else defaults to :8080
