@@ -25,6 +25,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Extract metadata from Dockerfile
+        id: metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: ziadmmh/goviolin
 
       - name: Build and Push Multi-Arch Docker Image
         uses: docker/build-push-action@v5
@@ -32,5 +38,5 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           progress: plain
-          tags: ziadmmh/goviolin:v0.0.2
+          tags: ${{ steps.metadata.outputs.tags }}
           push: true
