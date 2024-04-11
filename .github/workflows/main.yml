@@ -27,14 +27,12 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Extract metadata from Dockerfile
-        id: metadata
-        run: echo "::set-output name=tags::$(awk '/^LABEL org.opencontainers.image.tags/{gsub(/"/,"",$2); gsub(".*=",""); print }' Dockerfile)"
+        run: echo "TAGS=$(awk '/^LABEL org.opencontainers.image.tags/{gsub(/"/,"",$2); gsub(".*=",""); print }' Dockerfile)" >> $GITHUB_ENV
 
       - name: Build and Push Multi-Arch Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          progress: plain
           tags: ${{ steps.metadata.outputs.tags }}
           push: true
