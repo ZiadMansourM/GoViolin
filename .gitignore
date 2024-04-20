@@ -3,3 +3,5 @@
 
 *.exe
 GoViolin
+
+**/.DS_Store
