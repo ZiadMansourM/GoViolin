@@ -8,6 +8,8 @@ on:
 
 env:
   TAGS:
+  REPOSITORY:
+  BRANCH_NAME:
 
 permissions: write-all
 
@@ -52,21 +54,20 @@ jobs:
 
       - name: Set Enviroment Variables
         run: |
-          BRANCH_NAME="update-goviolin-image-${{ env.TAGS }}"
+          echo "REPOSITORY=ZiadMansourM/terraformed-odyssey" >> $GITHUB_ENV
+          echo "BRANCH_NAME=update-goviolin-image-${{ env.TAGS }}" >> $GITHUB_ENV
 
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          repository: ZiadMansourM/terraformed-odyssey
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ env.REPOSITORY }}
           ref: main
           path: terraformed-odyssey
 
       - name: Checkout Branch and Update Image Tag
         working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
-          ls
-          git checkout -b $BRANCH_NAME
+          git checkout -b ${{ env.BRANCH_NAME }}
           rm -rf live && mkdir -p live
           kustomize edit set image ziadmmh/goviolin:${{ env.TAGS }}
           kustomize build > live/live.yaml
@@ -74,10 +75,12 @@ jobs:
       - name: Update Image Tag and Send pull-request
         working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git status
           git add live/live.yaml
           git commit -m "Update goviolin image tag to ${{ env.TAGS }}"
-          git push origin $BRANCH_NAME
+          git push origin ${{ env.BRANCH_NAME }}
       
       - name: Create Pull Request
         working-directory: terraformed-odyssey/kubernetes/goviolin
@@ -90,5 +93,5 @@ jobs:
           --title "Update goviolin image tag to ${{ env.TAGS }}" \
           --body "This PR updates the goviolin image tag to ${{ env.TAGS }}." \
           --base "main" \
-          --head "$BRANCH_NAME"
+          --head "${{ env.BRANCH_NAME }}"
           --reviewer "ZiadMansourM"
