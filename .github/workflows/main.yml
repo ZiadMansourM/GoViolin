@@ -53,9 +53,13 @@ jobs:
           REPOSITORY="ZiadMansourM/terraformed-odyssey"
           BRANCH_NAME="update-goviolin-image-${{ env.TAGS }}"
 
+          ls
+          
           git clone \ 
           https://ZiadMansourM:${{ secrets.GH_CLI_TOKEN }}@github.com/${REPOSITORY}.git
+          ls
           cd terraformed-odyssey/kubernetes/goviolin
+          ls
 
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions Bot"
