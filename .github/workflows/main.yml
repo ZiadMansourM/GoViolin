@@ -98,4 +98,3 @@ jobs:
           --body "This PR updates the goviolin image tag to ${{ env.TAGS }}." \
           --base "main" \
           --head "${{ env.BRANCH_NAME }}"
-          --reviewer "ZiadMansourM"
