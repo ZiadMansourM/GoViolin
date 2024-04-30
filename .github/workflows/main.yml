@@ -8,6 +8,7 @@ on:
 
 env:
   TAGS:
+  TAG_VERSION:
   REPOSITORY:
   BRANCH_NAME:
 
@@ -35,7 +36,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Extract metadata from Dockerfile
-        run: echo "TAGS=$(awk '/^LABEL org.opencontainers.image.tags/{gsub(/"/,"",$2); gsub(".*=",""); print }' Dockerfile)" >> $GITHUB_ENV
+        run: |
+          echo "TAGS=$(awk '/^LABEL org.opencontainers.image.tags/{gsub(/"/,"",$2); gsub(".*=",""); print }' Dockerfile)" >> $GITHUB_ENV
+          echo "TAG_VERSION=$(echo $TAGS | cut -d: -f2)" >> $GITHUB_ENV
       
       - name: Check if TAGS is set
         run: |
@@ -55,7 +58,7 @@ jobs:
       - name: Set Enviroment Variables
         run: |
           echo "REPOSITORY=ZiadMansourM/terraformed-odyssey" >> $GITHUB_ENV
-          echo "BRANCH_NAME=update-goviolin-image-${{ env.TAGS }}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=update-goviolin-image-${{ env.TAG_VERSION }}" >> $GITHUB_ENV
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -69,7 +72,7 @@ jobs:
         run: |
           git checkout -b ${{ env.BRANCH_NAME }}
           rm -rf live && mkdir -p live
-          kustomize edit set image ziadmmh/goviolin:${{ env.TAGS }}
+          kustomize edit set image ziadmmh/goviolin:${{ env.TAG_VERSION }}
           kustomize build > live/live.yaml
       
       - name: Update Image Tag and Send pull-request
