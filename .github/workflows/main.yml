@@ -59,6 +59,11 @@ jobs:
         run: |
           echo "REPOSITORY=ZiadMansourM/terraformed-odyssey" >> $GITHUB_ENV
           echo "BRANCH_NAME=update-goviolin-image-${{ env.TAG_VERSION }}" >> $GITHUB_ENV
+          echo "-----------TESTING-----------"
+          echo "TAGS=${{ env.TAGS }}"
+          echo "TAG_VERSION=${{ env.TAG_VERSION }}"
+          echo "REPOSITORY=${{ env.REPOSITORY }}"
+          echo "BRANCH_NAME=${{ env.BRANCH_NAME }}"
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -71,7 +76,7 @@ jobs:
       - name: Checkout Branch and Update Image Tag
         working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
-          git checkout -b ${{ env.BRANCH_NAME }}
+          git checkout -b "${{ env.BRANCH_NAME }}"
           rm -rf live && mkdir -p live
           kustomize edit set image ziadmmh/goviolin:${{ env.TAG_VERSION }}
           kustomize build > live/live.yaml
