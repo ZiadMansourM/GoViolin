@@ -60,19 +60,19 @@ jobs:
           repository: ZiadMansourM/terraformed-odyssey
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: main
-          path: /tmp/terraformed-odyssey
+          path: terraformed-odyssey
 
       - name: Checkout Branch and Update Image Tag
-        working-directory: /tmp/terraformed-odyssey/kubernetes/goviolin
+        working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
-          ls /tmp/terraformed-odyssey
+          ls
           git checkout -b $BRANCH_NAME
           rm -rf live && mkdir -p live
           kustomize edit set image ziadmmh/goviolin:${{ env.TAGS }}
           kustomize build > live/live.yaml
       
       - name: Update Image Tag and Send pull-request
-        working-directory: /tmp/terraformed-odyssey/kubernetes/goviolin
+        working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
           git status
           git add live/live.yaml
@@ -80,7 +80,7 @@ jobs:
           git push origin $BRANCH_NAME
       
       - name: Create Pull Request
-        working-directory: /tmp/terraformed-odyssey/kubernetes/goviolin
+        working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" > /tmp/token.txt
 
