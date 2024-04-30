@@ -52,13 +52,12 @@ jobs:
 
       - name: Set Enviroment Variables
         run: |
-          REPOSITORY="ZiadMansourM/terraformed-odyssey"
           BRANCH_NAME="update-goviolin-image-${{ env.TAGS }}"
 
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          repository: $REPOSITORY
+          repository: ZiadMansourM/terraformed-odyssey
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: main
           path: /tmp/terraformed-odyssey
