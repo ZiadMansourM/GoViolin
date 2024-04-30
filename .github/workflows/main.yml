@@ -78,8 +78,8 @@ jobs:
       - name: Update Image Tag and Send pull-request
         working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git status
           git add live/live.yaml
           git commit -m "Update goviolin image tag to ${{ env.TAGS }}"
