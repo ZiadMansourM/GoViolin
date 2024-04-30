@@ -66,17 +66,22 @@ jobs:
           kustomize edit set image ziadmmh/goviolin:${{ env.TAGS }}
           kustomize build > live/live.yaml
 
+          git status
+          echo "Worked One"
           git add live/live.yaml
           git commit -m "Update goviolin image tag to ${{ env.TAGS }}"
           git push origin $BRANCH_NAME
 
+          echo "Worked Two"
+
           echo "${{ secrets.GH_CLI_TOKEN }}" > /tmp/token.txt
 
           gh auth login --with-token < /tmp/token.txt
-
+          echo "Worked Threee"
           gh pr create \
           --title "Update goviolin image tag to ${{ env.TAGS }}" \
           --body "This PR updates the goviolin image tag to ${{ env.TAGS }}." \
           --base "main" \
           --head "$BRANCH_NAME"
           --reviewer "ZiadMansourM"
+          echo "Worked Four"
