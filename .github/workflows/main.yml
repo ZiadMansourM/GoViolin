@@ -89,9 +89,9 @@ jobs:
       - name: Create Pull Request
         working-directory: terraformed-odyssey/kubernetes/goviolin
         run: |
-          echo "${{ secrets.GH_CLI_TOKEN }}" > /tmp/token.txt
+          echo "${{ secrets.GH_CLI_TOKEN }}" > token.txt
 
-          gh auth login --with-token < /tmp/token.txt
+          gh auth login --with-token < token.txt
 
           gh pr create \
           --title "Update goviolin image tag to ${{ env.TAGS }}" \
