@@ -60,10 +60,10 @@ jobs:
           echo "REPOSITORY=ZiadMansourM/terraformed-odyssey" >> $GITHUB_ENV
           echo "BRANCH_NAME=update-goviolin-image-${{ env.TAG_VERSION }}" >> $GITHUB_ENV
           echo "-----------TESTING-----------"
-          echo "TAGS=${{ env.TAGS }}"
-          echo "TAG_VERSION=${{ env.TAG_VERSION }}"
-          echo "REPOSITORY=${{ env.REPOSITORY }}"
-          echo "BRANCH_NAME=${{ env.BRANCH_NAME }}"
+          echo "${{ env.TAGS }}"
+          echo "${{ env.TAG_VERSION }}"
+          echo "${{ env.REPOSITORY }}"
+          echo "${{ env.BRANCH_NAME }}"
 
       - name: Checkout Code
         uses: actions/checkout@v4
