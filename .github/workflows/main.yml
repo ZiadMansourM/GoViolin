@@ -58,7 +58,7 @@ jobs:
       - name: Set Enviroment Variables
         run: |
           echo "REPOSITORY=ZiadMansourM/terraformed-odyssey" >> $GITHUB_ENV
-          echo "BRANCH_NAME=update-goviolin-image-${{ env.TAG_VERSION }}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=update-goviolin-image-${{ github.run_number }}" >> $GITHUB_ENV
           echo "-----------TESTING-----------"
           echo "${{ env.TAGS }}"
           echo "${{ env.TAG_VERSION }}"
