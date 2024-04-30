@@ -2,8 +2,12 @@ name: Test, Build, and Push Multi-Arch Image
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - master
   workflow_dispatch:
+
+env:
+  TAGS:
 
 jobs:
   test-and-build:
@@ -28,11 +32,51 @@ jobs:
       
       - name: Extract metadata from Dockerfile
         run: echo "TAGS=$(awk '/^LABEL org.opencontainers.image.tags/{gsub(/"/,"",$2); gsub(".*=",""); print }' Dockerfile)" >> $GITHUB_ENV
+      
+      - name: Check if TAGS is set
+        run: |
+          if [ -z "${{ env.TAGS }}" ]; then
+            echo "TAGS environment variable is not set. Please set it before running this workflow."
+            exit 1
+          fi
 
       - name: Build and Push Multi-Arch Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          tags: ${{ env.TAGS }}
+          tags: ${{ env.TAGS }},latest
           push: true
+      
+      - name: Update Image Tag and Send pull-request
+        run: |
+          REPOSITORY="ZiadMansourM/terraformed-odyssey"
+          BRANCH_NAME="update-goviolin-image-${{ env.TAGS }}"
+
+          git clone \ 
+          https://ZiadMansourM:${{ secrets.GH_CLI_TOKEN }}@github.com/${REPOSITORY}.git
+          cd terraformed-odyssey/kubernetes/goviolin
+
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
+
+          git checkout -b $BRANCH_NAME
+
+          rm -rf live && mkdir -p live
+          kustomize edit set image ziadmmh/goviolin:${{ env.TAGS }}
+          kustomize build > live/live.yaml
+
+          git add live/live.yaml
+          git commit -m "Update goviolin image tag to ${{ env.TAGS }}"
+          git push origin $BRANCH_NAME
+
+          echo "${{ secrets.GH_CLI_TOKEN }}" > /tmp/token.txt
+
+          gh auth login --with-token < /tmp/token.txt
+
+          gh pr create \
+          --title "Update goviolin image tag to ${{ env.TAGS }}" \
+          --body "This PR updates the goviolin image tag to ${{ env.TAGS }}." \
+          --base "main" \
+          --head "$BRANCH_NAME"
+          --reviewer "ZiadMansourM"
