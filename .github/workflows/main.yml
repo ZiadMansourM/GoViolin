@@ -62,7 +62,7 @@ jobs:
           rm -rf live && mkdir -p live
           kustomize edit set image ziadmmh/goviolin:${{ env.TAGS }}
           kustomize build > live/live.yaml
-
+          echo "Worked Zero"
           git status
           echo "Worked One"
           git add live/live.yaml
