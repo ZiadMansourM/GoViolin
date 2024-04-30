@@ -52,11 +52,14 @@ jobs:
         run: |
           REPOSITORY="ZiadMansourM/terraformed-odyssey"
           BRANCH_NAME="update-goviolin-image-${{ env.TAGS }}"
+          echo "-----------TESTING-----------"
+          echo "$REPOSITORY"
+          echo "$BRANCH_NAME"
       
       - name: Clone Code 
         run: |
           git clone \ 
-          https://ZiadMansourM:${{ secrets.GH_CLI_TOKEN }}@github.com/${REPOSITORY}.git \
+          https://ZiadMansourM:${{ secrets.GH_CLI_TOKEN }}@github.com/$REPOSITORY.git \
           /tmp/terraformed-odyssey
 
       - name: Checkout Branch and Update Image Tag
